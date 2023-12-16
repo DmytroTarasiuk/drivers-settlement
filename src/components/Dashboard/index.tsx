@@ -1,100 +1,88 @@
-import { useState } from "react";
+import { useMemo } from "react";
+import Grid from "@mui/material/Grid";
 
+import useCsvConverter from "../../hooks/useCsvConverter";
+import { AppType } from "../../types";
+import { fixSpellingMisstakes } from "../../utils";
 import CsvToJsonConverter from "../CsvToJsonConverter";
 import FileInput from "../FileInput";
 
+import styles from "./styles.module.css";
+
 const Dashboard = () => {
-  const [csvFile, setCsvFile] = useState(null);
-  const [jsonData, setJsonData] = useState(null);
+  const boltConfig = useCsvConverter();
+  const uberConfig = useCsvConverter();
+  const fnConfig = useCsvConverter();
 
-  const handleFileChange = (file) => {
-    setCsvFile(file);
-  };
+  const combinedArray = useMemo(() => {
+    if (boltConfig.jsonData && uberConfig.jsonData && fnConfig.jsonData) {
+      return fnConfig.jsonData.map((obj1) => {
+        const matchingObj2 = boltConfig.jsonData.find(
+          (obj2) =>
+            fixSpellingMisstakes(obj1["Kierowca"]?.toLowerCase()) ===
+            fixSpellingMisstakes(obj2["Kierowca"]?.toLowerCase()),
+        );
 
-  const handleJsonConvert = (data) => {
-    setJsonData(data);
-  };
+        const matchingObj3 = uberConfig.jsonData.find(
+          (obj3) =>
+            fixSpellingMisstakes(obj1["Kierowca"]?.toLowerCase()) ===
+            `${obj3["Imię kierowcy"]?.toLowerCase()} ${obj3[
+              "Nazwisko kierowcy"
+            ]?.toLowerCase()}`,
+        );
 
-  const array1 = [
-    {
-      "Identyfikator UUID kierowcy": "f17ad298-ae8d-4249-a030-547077e3ffeb",
-      "Imię kierowcy": "Oleksandr",
-      "Nazwisko kierowcy": "Yatskevych",
-      "Wypłacono Ci": "131.92",
-      "Wypłacono Ci : Twój przychód": "413.95",
-      "Wypłacono Ci : Bilans przejazdu : Wypłaty : Odebrana gotówka": "-282.03",
-      // ... other fields from the first object
-    },
-  ];
-
-  const array2 = [
-    {
-      "ID kierowcy": "3059OY",
-      Kierowca: "Oleksandr Yatskevych",
-      // ... other fields from the second object
-    },
-  ];
-
-  const array3 = [
-    {
-      Telefon: "48000000",
-      Kierowca: "Oleksandr Yatskevych",
-      // ... other fields from the third object
-    },
-  ];
-
-  // Function to merge objects based on a common field
-  function mergeObjects(obj1, obj2, obj3) {
-    return {
-      ...obj1,
-      ...obj2,
-      ...obj3,
-    };
-  }
-
-  // Combine arrays based on specified condition
-  const combinedArray = array1.map((obj1) => {
-    const matchingObj2 = array2.find(
-      (obj2) =>
-        `${obj1["Imię kierowcy"]} ${obj1["Nazwisko kierowcy"]}` ===
-        obj2["Kierowca"],
-    );
-
-    const matchingObj3 = array3.find(
-      (obj3) =>
-        `${obj1["Imię kierowcy"]} ${obj1["Nazwisko kierowcy"]}` ===
-        obj3["Kierowca"],
-    );
-
-    return matchingObj2 && matchingObj3
-      ? mergeObjects(obj1, matchingObj2, matchingObj3)
-      : obj1;
-  });
+        return {
+          ...obj1,
+          ...matchingObj2,
+          ...matchingObj3,
+        };
+      });
+    }
+  }, [uberConfig.jsonData, fnConfig.jsonData, boltConfig.jsonData]);
 
   console.log(combinedArray);
 
-  console.log(
-    combinedArray[0][
-      "Wypłacono Ci : Bilans przejazdu : Wypłaty : Odebrana gotówka"
-    ],
-  );
-
   return (
-    <div>
-      <FileInput onFileChange={handleFileChange} />
-      {csvFile && (
-        <CsvToJsonConverter
-          csvFile={csvFile}
-          onJsonConvert={handleJsonConvert}
-        />
-      )}
-      {jsonData && (
-        <div>
-          <h2>Converted JSON:</h2>
-          <pre>{JSON.stringify(jsonData, null, 2)}</pre>
-        </div>
-      )}
-    </div>
+    <>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={12} md={4} className={styles.item}>
+          <FileInput
+            type={AppType.BOLT}
+            onFileChange={boltConfig.handleFileChange}
+          />
+          {boltConfig.csvFile && (
+            <CsvToJsonConverter
+              csvFile={boltConfig.csvFile}
+              onJsonConvert={boltConfig.handleJsonConvert}
+            />
+          )}
+        </Grid>
+        <Grid item xs={12} sm={12} md={4} className={styles.item}>
+          <FileInput
+            type={AppType.UBER}
+            onFileChange={uberConfig.handleFileChange}
+          />
+          {uberConfig.csvFile && (
+            <CsvToJsonConverter
+              csvFile={uberConfig.csvFile}
+              onJsonConvert={uberConfig.handleJsonConvert}
+            />
+          )}
+        </Grid>
+        <Grid item xs={12} sm={12} md={4} className={styles.item}>
+          <FileInput
+            type={AppType.FREENOW}
+            onFileChange={fnConfig.handleFileChange}
+          />
+          {fnConfig.csvFile && (
+            <CsvToJsonConverter
+              csvFile={fnConfig.csvFile}
+              onJsonConvert={fnConfig.handleJsonConvert}
+            />
+          )}
+        </Grid>
+      </Grid>
+    </>
   );
 };
 
