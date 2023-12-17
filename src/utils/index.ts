@@ -1,5 +1,7 @@
 import * as XLSX from "xlsx";
 
+import { PaymentType } from "../types";
+
 export function truncateFileName(fileName, maxLength) {
   if (fileName.length <= maxLength) {
     return fileName;
@@ -64,5 +66,26 @@ export const getRentValue = (driverName: string) => {
       return 650;
     default:
       return 0;
+  }
+};
+
+export const getPaymentType = (driverName: string) => {
+  switch (driverName) {
+    case "Bohdan Striletskyi":
+      return PaymentType.CARD;
+    case "Eduard Savitski":
+      return PaymentType.CARD;
+    case "Mykyta Rodchenko":
+      return PaymentType.CARD;
+    case "Maksym Bevza":
+      return PaymentType.CARD;
+    case "Borys Kukava":
+      return PaymentType.CARD;
+    case "Maksym Hotsman":
+      return PaymentType.CARD;
+    case "Yevhen Trotskyi":
+      return PaymentType.CARD;
+    default:
+      return PaymentType.CASH;
   }
 };

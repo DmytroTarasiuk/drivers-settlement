@@ -5,6 +5,7 @@ import useCsvConverter from "../../hooks/useCsvConverter";
 import { AppType } from "../../types";
 import {
   fixSpellingMisstakes,
+  getPaymentType,
   getRentValue,
   removeSpecialChar,
 } from "../../utils";
@@ -92,8 +93,9 @@ const Dashboard = () => {
           item["Wypłacono Ci : Bilans przejazdu : Wypłaty : Odebrana gotówka"],
         ) || 0;
       const cashFn = +item["Płatności gotówką/kartą"] || 0;
-      const comission = 40;
+      const comission = profitBolt || profitUber || profitFn ? 40 : 0;
       const rent = getRentValue(name);
+      const paymentType = getPaymentType(name);
       const adjustmentsValue =
         adjustments && adjustments[item["ID kierowcy"]] !== 0
           ? adjustments[item["ID kierowcy"]]
@@ -110,7 +112,6 @@ const Dashboard = () => {
         comission -
         rent +
         (adjustmentsValue || 0);
-
       return {
         id: item["ID kierowcy"],
         name,
@@ -129,15 +130,14 @@ const Dashboard = () => {
         rent,
         adjustments: adjustmentsValue,
         salary: +salary.toFixed(2),
+        paymentType,
       };
     });
   }, [combinedArray, adjustments]);
 
-  console.log(filteredArray);
-
   return (
     <>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} className={styles.container}>
         <Grid item xs={12} sm={12} md={4} className={styles.item}>
           <FileInput
             type={AppType.BOLT}
@@ -179,7 +179,7 @@ const Dashboard = () => {
         <EnhancedTable
           rows={filteredArray}
           headCells={dashboardTableCells}
-          //orderByField="salary"
+          orderByField="salary"
           hideFieldsOnList={["id"]}
           renderFilterFields={["name"]}
           tabelCellComponent={(props: IDashboardTableCell) => (

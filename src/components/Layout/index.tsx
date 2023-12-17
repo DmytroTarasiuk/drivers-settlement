@@ -16,8 +16,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 
+//import Typography from "@mui/material/Typography";
 import { getMenuIcon, menu } from "../../utils/menu";
 
 import styles from "./styles.module.css";
@@ -104,9 +104,9 @@ const Layout = ({ children }: ILayout) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          {/* <Typography variant="h6" noWrap component="div">
             Dashboard
-          </Typography>
+          </Typography> */}
         </Toolbar>
       </AppBar>
       <Drawer

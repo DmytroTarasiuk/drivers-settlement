@@ -98,4 +98,10 @@ export const dashboardTableCells = [
     disablePadding: false,
     label: "Wyplata kierowcy",
   },
+  {
+    id: "paymentType",
+    numeric: false,
+    disablePadding: false,
+    label: "Sposob wyplaty",
+  },
 ];

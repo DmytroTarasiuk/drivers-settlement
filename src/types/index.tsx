@@ -5,8 +5,8 @@ export enum AppType {
 }
 
 export enum PaymentType {
-  CARD = "CARD",
-  CASH = "CASH",
+  CARD = "KARTA",
+  CASH = "GOTOWKA",
 }
 
 // export enum Drivers {

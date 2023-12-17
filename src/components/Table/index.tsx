@@ -79,7 +79,7 @@ export default function EnhancedTable({
   tabelCellComponent = null,
   hideFieldsOnList,
 }: ITable) {
-  const [order, setOrder] = useState<Order>("asc");
+  const [order, setOrder] = useState<Order>("desc");
   const [orderBy, setOrderBy] = useState<string>(orderByField);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
