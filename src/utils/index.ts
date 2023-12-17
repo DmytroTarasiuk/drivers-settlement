@@ -62,7 +62,7 @@ export const getRentValue = (driverName: string) => {
       return 600;
     case "Maksym Hotsman":
       return 650;
-    case "Uladzislau Nekrashevich":
+    case "Uladzislau Nekreshevich":
       return 650;
     default:
       return 0;
