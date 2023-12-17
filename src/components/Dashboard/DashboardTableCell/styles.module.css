@@ -1,0 +1,9 @@
+.cell {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.input {
+    max-width: 90px;
+    padding: 8px;
+}

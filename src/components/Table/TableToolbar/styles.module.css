@@ -1,0 +1,8 @@
+.downloadButton {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid lightgrey;
+    background: #fff;
+    border-radius: 8px;
+    color: #000;
+}
