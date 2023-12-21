@@ -13,6 +13,11 @@ export interface IDashboardTableCell {
 const DashboardTableCell = memo(
   ({ keyItem, row, adjustment, onAdjustmentChange }: IDashboardTableCell) => {
     const [localAdjustment, setLocalAdjustment] = useState(adjustment || "");
+    const [isInputLeave, setIsInputLeave] = useState<boolean>(false);
+
+    const handleBlur = () => {
+      setIsInputLeave(true);
+    };
 
     const handleAdjustmentChange = useCallback((event) => {
       const value = Number(event.target.value);
@@ -20,9 +25,11 @@ const DashboardTableCell = memo(
     }, []);
 
     useEffect(() => {
-      const adjustedValue = Number(localAdjustment);
-      onAdjustmentChange && onAdjustmentChange(adjustedValue);
-    }, [localAdjustment, onAdjustmentChange]);
+      if (isInputLeave) {
+        const adjustedValue = Number(localAdjustment);
+        onAdjustmentChange && onAdjustmentChange(adjustedValue);
+      }
+    }, [isInputLeave, onAdjustmentChange, localAdjustment]);
 
     const calculatedSalary = useMemo(() => {
       switch (keyItem) {
@@ -33,7 +40,7 @@ const DashboardTableCell = memo(
               value={localAdjustment}
               className={styles.input}
               onChange={handleAdjustmentChange}
-              onBlur={() => {}}
+              onBlur={handleBlur}
               type="number"
             />
           );
