@@ -39,6 +39,8 @@ export const fixSpellingMisstakes = (name: string) => {
   switch (name) {
     case "dmytro tarasuik":
       return "dmytro tarasiuk";
+    case "bohdan striletskyi":
+      return "bogdan striletskyi";
     default:
       return name;
   }
