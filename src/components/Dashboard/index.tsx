@@ -180,6 +180,7 @@ const Dashboard = () => {
           rows={filteredArray}
           headCells={dashboardTableCells}
           orderByField="salary"
+          tableHeaderText="Rozliczenie Kierowcow"
           hideFieldsOnList={["id"]}
           renderFilterFields={["name"]}
           tabelCellComponent={(props: IDashboardTableCell) => (

@@ -8,6 +8,7 @@ import {
 
 import Dashboard from "./components/Dashboard";
 import Layout from "./components/Layout";
+import Raport from "./components/Raport";
 
 interface ILayoutRoute {
   exact?: boolean;
@@ -32,6 +33,7 @@ function App() {
     <Router>
       <Switch>
         <LayoutRoute exact path="/dashboard" component={<Dashboard />} />
+        <LayoutRoute exact path="/raport" component={<Raport />} />
         <Redirect from="/" to="/dashboard" />
       </Switch>
     </Router>

@@ -13,10 +13,12 @@ interface EnhancedTableToolbarProps {
   numSelected: number;
   tableFilterComponent?: any;
   onDownloadCsv?: () => void;
+  tableHeaderText: string;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected, tableFilterComponent, onDownloadCsv } = props;
+  const { numSelected, tableFilterComponent, onDownloadCsv, tableHeaderText } =
+    props;
 
   return (
     <Toolbar
@@ -48,7 +50,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Rozliczenie Kierowcow
+          {tableHeaderText}
         </Typography>
       )}
       {numSelected > 0 ? (

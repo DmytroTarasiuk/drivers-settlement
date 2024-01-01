@@ -23,6 +23,8 @@ interface ITable {
   rows?: any[];
   headCells?: any[];
   orderByField?: string;
+  orderType?: Order;
+  tableHeaderText?: string;
   tabelCellComponent?: any;
   renderFilterFields?: string[];
   hideFieldsOnList?: string[];
@@ -78,8 +80,10 @@ export default function EnhancedTable({
   renderFilterFields,
   tabelCellComponent = null,
   hideFieldsOnList,
+  orderType = "desc",
+  tableHeaderText,
 }: ITable) {
-  const [order, setOrder] = useState<Order>("desc");
+  const [order, setOrder] = useState<Order>(orderType);
   const [orderBy, setOrderBy] = useState<string>(orderByField);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
@@ -184,6 +188,7 @@ export default function EnhancedTable({
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
+          tableHeaderText={tableHeaderText}
           onDownloadCsv={handleCsvDownload}
           tableFilterComponent={
             <TableFilter
@@ -220,7 +225,7 @@ export default function EnhancedTable({
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id as number)}
+                    //onClick={(event) => handleClick(event, row.id as number)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -228,7 +233,7 @@ export default function EnhancedTable({
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
-                    <TableCell padding="checkbox">
+                    {/* <TableCell padding="checkbox">
                       <Checkbox
                         color="primary"
                         checked={isItemSelected}
@@ -236,7 +241,7 @@ export default function EnhancedTable({
                           "aria-labelledby": labelId,
                         }}
                       />
-                    </TableCell>
+                    </TableCell> */}
                     {rowValues.map((keyItem, i) => {
                       return (
                         !hideFieldsOnList.includes(keyItem) && (

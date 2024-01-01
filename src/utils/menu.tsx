@@ -6,6 +6,11 @@ export const menu = [
     name: "Dashboard",
     route: "/dashboard",
   },
+  {
+    id: 2,
+    name: "Raport",
+    route: "/raport",
+  },
 ];
 
 export const getMenuIcon = (name: string) => {
