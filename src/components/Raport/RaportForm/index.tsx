@@ -20,7 +20,7 @@ const RaportForm = ({ callback }: IRaportForm) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const initialState = {
-    date: formatDate(date),
+    date: date && formatDate(date),
     symbol: "",
     description: "",
     income: 0,
