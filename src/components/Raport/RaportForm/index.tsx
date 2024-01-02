@@ -27,14 +27,14 @@ const RaportForm = ({ callback }: IRaportForm) => {
     cost: 0,
   };
 
-  const validate = (values) => {
-    if (values.description === "") {
-      errors.description = "Please enter description";
-    }
-    // if (!values.symbol) {
-    //   errors.symbol = "Please select symbol";
-    // }
-  };
+  // const validate = (values) => {
+  //   if (values.description === "") {
+  //     errors.description = "Please enter description";
+  //   }
+  //   // if (!values.symbol) {
+  //   //   errors.symbol = "Please select symbol";
+  //   // }
+  // };
 
   const { getFieldProps, handleSubmit, errors, values, resetForm, submitForm } =
     useFormik({
