@@ -27,6 +27,13 @@ export const exportToCSV = (data, filename) => {
   XLSX.writeFile(wb, `${filename}.csv`);
 };
 
+export const exportToExcel = (data, filename) => {
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  XLSX.writeFile(wb, `${filename}.xlsx`);
+};
+
 export function mergeObjects(obj1, obj2, obj3) {
   return {
     ...obj1,

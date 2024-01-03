@@ -13,12 +13,18 @@ interface EnhancedTableToolbarProps {
   numSelected: number;
   tableFilterComponent?: any;
   onDownloadCsv?: () => void;
+  onDownloadExcel?: () => void;
   tableHeaderText: string;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected, tableFilterComponent, onDownloadCsv, tableHeaderText } =
-    props;
+  const {
+    numSelected,
+    tableFilterComponent,
+    onDownloadCsv,
+    onDownloadExcel,
+    tableHeaderText,
+  } = props;
 
   return (
     <Toolbar
@@ -61,6 +67,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         </Tooltip>
       ) : (
         <>
+          <Button
+            startIcon={<FileDownloadIcon />}
+            className={styles.downloadButton}
+            onClick={onDownloadExcel}
+          >
+            Download Excel
+          </Button>
           <Button
             startIcon={<FileDownloadIcon />}
             className={styles.downloadButton}

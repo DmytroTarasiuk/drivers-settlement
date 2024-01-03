@@ -11,7 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 
-import { exportToCSV } from "../../utils";
+import { exportToCSV, exportToExcel } from "../../utils";
 
 import { useDataParsing } from "./hooks/useDataParsing";
 import { filterData } from "./TableFilter/utils";
@@ -179,7 +179,12 @@ export default function EnhancedTable({
   );
 
   const handleCsvDownload = useCallback(
-    () => exportToCSV(rows, "sales"),
+    () => exportToCSV(rows, "CSV_file"),
+    [rows],
+  );
+
+  const handleExcelDownload = useCallback(
+    () => exportToExcel(rows, "Excel_file"),
     [rows],
   );
 
@@ -190,6 +195,7 @@ export default function EnhancedTable({
           numSelected={selected.length}
           tableHeaderText={tableHeaderText}
           onDownloadCsv={handleCsvDownload}
+          onDownloadExcel={handleExcelDownload}
           tableFilterComponent={
             <TableFilter
               columns={headCells}
