@@ -1,14 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import REPORT_API, { IReport } from "../../api/reports";
+import CustomModal from "../../modal";
+import { showModalWithParams } from "../../redux/modal/actions";
+import { CustomModalTypes } from "../../redux/modal/state";
 import EnhancedTable from "../Table";
 
-import RaportForm from "./RaportForm";
+//import RaportForm from "./RaportForm";
 import RaportTableCell, { IRaportTableCell } from "./RaportTableCell";
 import { raportTableCells } from "./utils";
 
 const Raport = () => {
   const [reports, setReports] = useState<IReport[]>([]);
+  const dispatch = useDispatch();
 
   const fetchReports = useCallback(() => {
     REPORT_API.getReports()
@@ -41,6 +46,18 @@ const Raport = () => {
     });
   };
 
+  const onAddReport = useCallback(() => {
+    dispatch(
+      showModalWithParams({
+        modalType: CustomModalTypes.ADD_REPORT,
+        params: {
+          refreshOnCLose: true,
+          refetch: fetchReports,
+        },
+      }),
+    );
+  }, [dispatch, fetchReports]);
+
   useEffect(() => {
     fetchReports();
   }, [fetchReports]);
@@ -53,10 +70,11 @@ const Raport = () => {
 
   return (
     <>
-      <RaportForm callback={fetchReports} />
+      {/* <RaportForm callback={fetchReports} /> */}
       <EnhancedTable
         rows={reportsWithIndexes}
         headCells={raportTableCells}
+        onAdd={onAddReport}
         orderType="asc"
         tableHeaderText="Faktury"
         orderByField="idx"
@@ -66,6 +84,7 @@ const Raport = () => {
           <RaportTableCell {...props} refetch={fetchReports} />
         )}
       />
+      <CustomModal />
     </>
   );
 };

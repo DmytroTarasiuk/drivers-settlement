@@ -1,23 +1,26 @@
 import { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, MenuItem, TextField } from "@mui/material";
 import { Dayjs } from "dayjs";
 import { useFormik } from "formik";
 import { useSnackbar } from "notistack";
 
 import REPORT_API from "../../../api/reports";
+import { hideModal } from "../../../redux/modal/actions";
+import { getModalParams } from "../../../redux/modal/selectors";
 
 import DatePickerComponent from "./DatePicker";
 import { formatDate, symbols } from "./utils";
 
 import styles from "./styles.module.css";
 
-interface IRaportForm {
-  callback?: () => void;
-}
-
-const RaportForm = ({ callback }: IRaportForm) => {
+const RaportForm = () => {
   const [date, setDate] = useState<Dayjs | null>();
   const { enqueueSnackbar } = useSnackbar();
+  const modalParams = useSelector(getModalParams);
+  const dispatch = useDispatch();
+
+  const { refetch } = modalParams;
 
   const initialState = {
     date: date && formatDate(date),
@@ -56,12 +59,13 @@ const RaportForm = ({ callback }: IRaportForm) => {
             enqueueSnackbar("Raport was created", {
               variant: "success",
             });
-            callback?.();
+            refetch?.();
+            dispatch(hideModal());
           }
         })
         .catch((error) => console.log(error));
     },
-    [callback, enqueueSnackbar],
+    [enqueueSnackbar, dispatch, refetch],
   );
 
   //const disableButton = !!errors.description;

@@ -1,3 +1,4 @@
+import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Button from "@mui/material/Button";
@@ -14,6 +15,7 @@ interface EnhancedTableToolbarProps {
   tableFilterComponent?: any;
   onDownloadCsv?: () => void;
   onDownloadExcel?: () => void;
+  onAddAction?: () => void;
   tableHeaderText: string;
 }
 
@@ -24,6 +26,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     onDownloadCsv,
     onDownloadExcel,
     tableHeaderText,
+    onAddAction,
   } = props;
 
   return (
@@ -66,11 +69,19 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           </IconButton>
         </Tooltip>
       ) : (
-        <>
+        <div className={styles.actions}>
+          <Button
+            startIcon={<AddIcon />}
+            className={styles.downloadButton}
+            onClick={onAddAction}
+          >
+            Add
+          </Button>
           <Button
             startIcon={<FileDownloadIcon />}
             className={styles.downloadButton}
             onClick={onDownloadExcel}
+            //style={{ minWidth: "200px" }}
           >
             Download Excel
           </Button>
@@ -82,7 +93,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             Download Csv
           </Button>
           {tableFilterComponent}
-        </>
+        </div>
       )}
     </Toolbar>
   );

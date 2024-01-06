@@ -1,8 +1,21 @@
 .downloadButton {
-    width: 200px;
     padding: 8px;
     border: 1px solid lightgrey;
     background: #fff;
     border-radius: 8px;
     color: #000;
+    margin: 0 10px;
+}
+
+.actions {
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (max-width: 1080px) {
+    .actions {
+        width: 100%;
+    }
 }

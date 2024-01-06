@@ -28,6 +28,7 @@ interface ITable {
   tabelCellComponent?: any;
   renderFilterFields?: string[];
   hideFieldsOnList?: string[];
+  onAdd?: () => void;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -82,6 +83,7 @@ export default function EnhancedTable({
   hideFieldsOnList,
   orderType = "desc",
   tableHeaderText,
+  onAdd,
 }: ITable) {
   const [order, setOrder] = useState<Order>(orderType);
   const [orderBy, setOrderBy] = useState<string>(orderByField);
@@ -196,6 +198,7 @@ export default function EnhancedTable({
           tableHeaderText={tableHeaderText}
           onDownloadCsv={handleCsvDownload}
           onDownloadExcel={handleExcelDownload}
+          onAddAction={onAdd}
           tableFilterComponent={
             <TableFilter
               columns={headCells}
