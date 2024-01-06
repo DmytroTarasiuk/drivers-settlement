@@ -7,8 +7,11 @@ import {
 } from "react-router-dom";
 
 import Dashboard from "./components/Dashboard";
+//import AuthGuard from "./components/HOC/AuthGuard";
 import Layout from "./components/Layout";
+//import AuthLayout from "./components/Layout/AuthLayout";
 import Raport from "./components/Raport";
+//import AuthContext from "./context/auth-context";
 
 interface ILayoutRoute {
   exact?: boolean;
@@ -17,6 +20,7 @@ interface ILayoutRoute {
 }
 
 function App() {
+  //const authCtx = useContext(AuthContext);
   const LayoutRoute = ({ exact, path, component }: ILayoutRoute) => {
     return (
       <Route
@@ -32,6 +36,13 @@ function App() {
   return (
     <Router>
       <Switch>
+        {/* {!authCtx.isLoggedIn ? (
+          <Route exact path={"/"} component={AuthLayout} />
+        ) : (
+          <Route path={"/"} exact>
+            <Redirect to={"/dashboard"} />
+          </Route>
+        )} */}
         <LayoutRoute exact path="/dashboard" component={<Dashboard />} />
         <LayoutRoute exact path="/raport" component={<Raport />} />
         <Redirect from="/" to="/dashboard" />
