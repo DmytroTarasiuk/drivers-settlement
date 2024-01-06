@@ -7,6 +7,8 @@
     display: flex;
     flex-direction: column;
     margin: 5vh;
+    min-width: 300px;
+    min-height: 200px;
   }
   
   .errors {

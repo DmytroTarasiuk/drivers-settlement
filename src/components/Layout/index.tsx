@@ -1,10 +1,11 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import MenuIcon from "@mui/icons-material/Menu";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -17,6 +18,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 
+import AuthContext from "../../context/auth-context";
 //import Typography from "@mui/material/Typography";
 import { getMenuIcon, menu } from "../../utils/menu";
 
@@ -81,6 +83,7 @@ const Layout = ({ children }: ILayout) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const history = useHistory();
+  const autCtx = useContext(AuthContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -94,7 +97,7 @@ const Layout = ({ children }: ILayout) => {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar className={styles.header}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -104,9 +107,13 @@ const Layout = ({ children }: ILayout) => {
           >
             <MenuIcon />
           </IconButton>
-          {/* <Typography variant="h6" noWrap component="div">
-            Dashboard
-          </Typography> */}
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => autCtx.logout()}
+          >
+            Log out
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
