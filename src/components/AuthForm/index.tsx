@@ -37,7 +37,6 @@ function AuthForm() {
     AUTH_API.login(loginData)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data);
           authCtx.login(response.data.token);
           history.push("/dashboard");
         } else {

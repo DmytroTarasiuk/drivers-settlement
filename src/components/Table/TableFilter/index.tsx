@@ -5,8 +5,10 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import MenuList from "@mui/material/MenuList";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
+import { format } from "date-fns";
 
 import Filter from "./Filter";
+import { FilterTypes } from "./types";
 import { Column } from "./types";
 
 import styles from "./styles.module.css";
@@ -54,9 +56,22 @@ const TableFilter = ({
   const handleFilterChange = (
     event: React.ChangeEvent<any>,
     column: Column | any,
+    dateField?: string,
+    valueField?: Date | any,
   ) => {
     const newFilters = { ...filters };
     switch (column.filterType) {
+      case FilterTypes.DATE: {
+        const value = format(new Date(valueField), "yyyy-MM-dd");
+        if (dateField) {
+          newFilters[column.id] = {
+            ...newFilters[column.id],
+            [dateField]: value,
+          };
+        }
+        setFilters(newFilters);
+        break;
+      }
       default: {
         newFilters[column] = event.target.value;
         setFilters(newFilters);

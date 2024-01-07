@@ -6,6 +6,7 @@ import {
   Select,
 } from "@mui/material";
 
+import DateFilter from "./DateFilter";
 import { Column, IFilterType } from "./types";
 
 import styles from "./styles.module.css";
@@ -30,6 +31,14 @@ const Filter = ({
     switch (column.filterType) {
       default:
         switch (column.id) {
+          case "date":
+            return (
+              <DateFilter
+                column={column}
+                filters={filters}
+                handleFilterChange={handleFilterChange}
+              />
+            );
           default:
             if (column.label !== "" && column.filterType) {
               switch (column.id) {

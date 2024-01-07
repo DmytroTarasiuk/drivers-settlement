@@ -8,6 +8,7 @@ export interface Column {
 
 export enum FilterTypes {
   SELECT = "SELECT",
+  DATE = "DATE",
 }
 
 export interface IFilterType {

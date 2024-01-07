@@ -1,3 +1,5 @@
+import { FilterTypes } from "../Table/TableFilter/types";
+
 export const mockData = [
   {
     id: 1,
@@ -31,6 +33,7 @@ export const raportTableCells = [
     numeric: false,
     disablePadding: false,
     label: "Data",
+    filterType: FilterTypes.DATE,
   },
   {
     id: "symbol",

@@ -79,7 +79,7 @@ const Raport = () => {
         tableHeaderText="Faktury"
         orderByField="idx"
         hideFieldsOnList={["_id", "__v"]}
-        //renderFilterFields={["date"]}
+        renderFilterFields={["date"]}
         tabelCellComponent={(props: IRaportTableCell) => (
           <RaportTableCell {...props} refetch={fetchReports} />
         )}
