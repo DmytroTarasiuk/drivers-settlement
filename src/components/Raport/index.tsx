@@ -14,6 +14,8 @@ import { raportTableCells } from "./utils";
 const Raport = () => {
   const [reports, setReports] = useState<IReport[]>([]);
   const dispatch = useDispatch();
+  let kwCounter = 0;
+  let kpCounter = 0;
 
   const fetchReports = useCallback(() => {
     REPORT_API.getReports()
@@ -68,18 +70,31 @@ const Raport = () => {
     [sortedReports],
   );
 
+  const finalData = reportsWithIndexes.map((item: IReport) => {
+    if (item.symbol === "KW") {
+      kwCounter++;
+    } else if (item.symbol === "KP") {
+      kpCounter++;
+    }
+
+    return {
+      ...item,
+      ...(item.symbol === "KW" && { kwCounter }),
+      ...(item.symbol === "KP" && { kpCounter }),
+    };
+  });
+
   return (
     <>
-      {/* <RaportForm callback={fetchReports} /> */}
       <EnhancedTable
-        rows={reportsWithIndexes}
+        rows={finalData}
         headCells={raportTableCells}
         onAdd={onAddReport}
         orderType="asc"
         tableHeaderText="Faktury"
         orderByField="idx"
-        hideFieldsOnList={["_id", "__v"]}
-        renderFilterFields={["date"]}
+        hideFieldsOnList={["_id", "__v", "kwCounter", "kpCounter"]}
+        renderFilterFields={["date", "symbol"]}
         tabelCellComponent={(props: IRaportTableCell) => (
           <RaportTableCell {...props} refetch={fetchReports} />
         )}

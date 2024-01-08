@@ -40,6 +40,7 @@ export const raportTableCells = [
     numeric: false,
     disablePadding: false,
     label: "Dowod",
+    filterType: FilterTypes.SELECT,
   },
   {
     id: "description",

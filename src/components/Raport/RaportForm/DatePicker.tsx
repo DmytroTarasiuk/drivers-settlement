@@ -20,6 +20,8 @@ export default function DatePickerComponent({ value, setValue }: IDatePicker) {
           value={value}
           onChange={(newValue) => setValue(newValue)}
           onError={() => console.log("error")}
+          views={["day", "month", "year"]}
+          format="DD/MM/YYYY"
         />
       </DemoContainer>
     </LocalizationProvider>

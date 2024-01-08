@@ -33,7 +33,17 @@ const RaportTableCell = memo(({ keyItem, row, refetch }: IRaportTableCell) => {
   const renderContent = useMemo(() => {
     switch (keyItem) {
       case "symbol":
-        return `${row[keyItem] + " " + formatInputDate(row["date"])}`;
+        const symbolToShow =
+          row[keyItem] === "KW" ? row["kwCounter"] : row["kpCounter"];
+        return `${
+          row[keyItem] +
+          " " +
+          "(" +
+          symbolToShow +
+          "/" +
+          formatInputDate(row["date"]).slice(3) +
+          ")"
+        }`;
       case "actions":
         return (
           <Button
