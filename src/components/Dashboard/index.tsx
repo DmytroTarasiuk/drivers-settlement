@@ -6,8 +6,8 @@ import { AppType } from "../../types";
 import {
   fixSpellingMisstakes,
   getPaymentType,
-  getRentValue,
   removeSpecialChar,
+  rentValues,
 } from "../../utils";
 import CsvToJsonConverter from "../CsvToJsonConverter";
 import FileInput from "../FileInput";
@@ -22,9 +22,12 @@ const Dashboard = () => {
   const boltConfig = useCsvConverter();
   const uberConfig = useCsvConverter();
   const fnConfig = useCsvConverter();
+
   const [adjustments, setAdjustments] = useState<Record<string, number>>({});
+  const [rent, setRent] = useState<Record<string, number>>(rentValues);
 
   const memoizedAdjustments = useMemo(() => adjustments, [adjustments]);
+  const memoizedRent = useMemo(() => rent, [rent]);
 
   const handleAdjustmentChange = useCallback(
     (id: string, value: number) => {
@@ -39,6 +42,21 @@ const Dashboard = () => {
       });
     },
     [setAdjustments],
+  );
+
+  const handleRentChange = useCallback(
+    (id: string, value: number) => {
+      setRent((prevRent) => {
+        if (prevRent[id] !== value) {
+          return {
+            ...prevRent,
+            [id]: value,
+          };
+        }
+        return prevRent;
+      });
+    },
+    [setRent],
   );
 
   const combinedArray = useMemo(() => {
@@ -94,7 +112,8 @@ const Dashboard = () => {
         ) || 0;
       const cashFn = +item["Płatności gotówką/kartą"] || 0;
       const comission = profitBolt || profitUber || profitFn ? 40 : 0;
-      const rent = getRentValue(name);
+      const rentValue =
+        rent && rent[item["ID kierowcy"]] !== 0 ? rent[item["ID kierowcy"]] : 0;
       const paymentType = getPaymentType(name);
       const adjustmentsValue =
         adjustments && adjustments[item["ID kierowcy"]] !== 0
@@ -110,7 +129,7 @@ const Dashboard = () => {
         vat -
         vatBonus -
         comission -
-        rent +
+        (rentValue || 0) +
         (adjustmentsValue || 0);
       return {
         id: item["ID kierowcy"],
@@ -127,13 +146,13 @@ const Dashboard = () => {
         vat: +vat.toFixed(2),
         vatBonus: +vatBonus.toFixed(2),
         comission,
-        rent,
+        rent: rentValue,
         adjustments: adjustmentsValue,
         salary: +salary.toFixed(2),
         paymentType,
       };
     });
-  }, [combinedArray, adjustments]);
+  }, [combinedArray, adjustments, rent]);
 
   return (
     <>
@@ -187,6 +206,10 @@ const Dashboard = () => {
             <DashboardTableCell
               {...props}
               adjustment={memoizedAdjustments[props.row.id] || 0}
+              rent={memoizedRent[props.row.id] || 0}
+              onRentChange={(value) => {
+                handleRentChange(props.row.id, value);
+              }}
               onAdjustmentChange={(value) =>
                 handleAdjustmentChange(props.row.id, value)
               }
