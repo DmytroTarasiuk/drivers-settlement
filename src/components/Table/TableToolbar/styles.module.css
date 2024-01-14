@@ -9,13 +9,13 @@
 
 .actions {
     display: flex;
-    width: 50%;
+    width: auto;
     justify-content: space-between;
     align-items: center;
 }
 
-@media (max-width: 1080px) {
+/* @media (max-width: 1080px) {
     .actions {
         width: 100%;
     }
-}
+} */

@@ -72,13 +72,15 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         </Tooltip>
       ) : (
         <div className={styles.actions}>
-          <Button
-            startIcon={<AddIcon />}
-            className={styles.downloadButton}
-            onClick={onAddAction}
-          >
-            Add
-          </Button>
+          {onAddAction && (
+            <Button
+              startIcon={<AddIcon />}
+              className={styles.downloadButton}
+              onClick={onAddAction}
+            >
+              Add
+            </Button>
+          )}
           {enableDownload && (
             <Button
               startIcon={<FileDownloadIcon />}
