@@ -9,7 +9,7 @@ import EnhancedTable from "../Table";
 
 //import RaportForm from "./RaportForm";
 import RaportTableCell, { IRaportTableCell } from "./RaportTableCell";
-import { raportTableCells } from "./utils";
+import { formatInputDate, raportTableCells } from "./utils";
 
 const Raport = () => {
   const [reports, setReports] = useState<IReport[]>([]);
@@ -84,6 +84,30 @@ const Raport = () => {
     };
   });
 
+  const dataToExport = finalData?.map((item) => {
+    return {
+      Lp: item.idx,
+      Data: item.date,
+      "Dowód Symbol Nr":
+        item.symbol === "KW"
+          ? item.symbol +
+            "(" +
+            item.kwCounter +
+            "/" +
+            formatInputDate(item.date).slice(3) +
+            ")"
+          : item.symbol +
+            "(" +
+            item.kpCounter +
+            "/" +
+            formatInputDate(item.date).slice(3) +
+            ")",
+      Treść: item.description,
+      Przychód: item.income,
+      Rozchód: item.cost,
+    };
+  });
+
   return (
     <>
       <EnhancedTable
@@ -92,6 +116,7 @@ const Raport = () => {
         onAdd={onAddReport}
         orderType="asc"
         tableHeaderText="Faktury"
+        dataToExport={dataToExport}
         orderByField="idx"
         hideFieldsOnList={["_id", "__v", "kwCounter", "kpCounter"]}
         renderFilterFields={["date", "symbol"]}

@@ -28,6 +28,7 @@ interface ITable {
   tabelCellComponent?: any;
   renderFilterFields?: string[];
   hideFieldsOnList?: string[];
+  dataToExport?: any[];
   onAdd?: () => void;
 }
 
@@ -84,6 +85,7 @@ export default function EnhancedTable({
   orderType = "desc",
   tableHeaderText,
   onAdd,
+  dataToExport,
 }: ITable) {
   const [order, setOrder] = useState<Order>(orderType);
   const [orderBy, setOrderBy] = useState<string>(orderByField);
@@ -181,13 +183,13 @@ export default function EnhancedTable({
   );
 
   const handleCsvDownload = useCallback(
-    () => exportToCSV(rows, "CSV_file"),
-    [rows],
+    () => exportToCSV(dataToExport ? dataToExport : rows, "CSV_file"),
+    [rows, dataToExport],
   );
 
   const handleExcelDownload = useCallback(
-    () => exportToExcel(rows, "Excel_file"),
-    [rows],
+    () => exportToExcel(dataToExport ? dataToExport : rows, "Excel_file"),
+    [rows, dataToExport],
   );
 
   return (
