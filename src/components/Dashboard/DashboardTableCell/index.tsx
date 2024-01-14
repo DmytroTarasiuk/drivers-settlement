@@ -54,7 +54,7 @@ const DashboardTableCell = memo(
       onRentChange,
     ]);
 
-    const calculatedSalary = useMemo(() => {
+    const renderContent = useMemo(() => {
       switch (keyItem) {
         case "rent":
           return (
@@ -92,9 +92,44 @@ const DashboardTableCell = memo(
       handleRentChange,
     ]);
 
+    const renderBackground = (key) => {
+      switch (key) {
+        case "profitBolt":
+        case "cashBolt":
+        case "bonusBolt":
+          return "#126aae";
+        case "profitUber":
+        case "cashUber":
+        case "bonusUber":
+          return "#71b24e";
+        case "profitFn":
+        case "cashFn":
+        case "bonusFn":
+          return "#fd0300";
+        case "rent":
+        case "adjustments":
+          return "#fbff02";
+        case "salary":
+          return "#212121";
+        default:
+          return "#fff";
+      }
+    };
+
     return (
-      <TableCell align="left" padding="normal">
-        <div className={styles.cell}>{calculatedSalary}</div>
+      <TableCell
+        style={{
+          background: renderBackground(keyItem),
+        }}
+        align="left"
+        padding="normal"
+      >
+        <div
+          style={{ color: keyItem === "salary" && "#fff" }}
+          className={styles.cell}
+        >
+          {renderContent}
+        </div>
       </TableCell>
     );
   },

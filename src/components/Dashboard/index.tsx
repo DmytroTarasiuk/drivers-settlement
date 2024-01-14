@@ -154,6 +154,27 @@ const Dashboard = () => {
     });
   }, [combinedArray, adjustments, rent]);
 
+  const dataToExport = filteredArray?.map((item) => {
+    return {
+      Kierowca: item.name,
+      "Obrót Bolt": item.profitBolt,
+      "Gotówka Bolt": item.cashBolt,
+      "Bonus Bolt": item.bonusBolt,
+      "Obrót Uber": item.profitUber,
+      "Gotówka Uber": item.cashUber,
+      "Bonus Uber": item.bonusUber,
+      "Obrót Freenow": item.profitFn,
+      "Gotówka Freenow": item.cashFn,
+      "Bonus Freenow": item.bonusFn,
+      VAT: item.vat,
+      "VAT(Bonusy)": item.vatBonus,
+      "Prowizja Karttell": item.comission,
+      Wynajem: item.rent,
+      Regulacja: item.adjustments,
+      "Wyplata Kierowcy": item.salary,
+    };
+  });
+
   return (
     <>
       <Grid container spacing={3} className={styles.container}>
@@ -198,6 +219,7 @@ const Dashboard = () => {
         <EnhancedTable
           rows={filteredArray}
           headCells={dashboardTableCells}
+          dataToExport={dataToExport}
           orderByField="salary"
           tableHeaderText="Rozliczenie Kierowcow"
           hideFieldsOnList={["id"]}

@@ -51,6 +51,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
+            style={{
+              background: headCell.background,
+              fontSize: "1rem",
+              fontWeight: 700,
+            }}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -59,6 +64,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
+              style={{ color: headCell.color }}
             >
               {headCell.label}
               {orderBy === headCell.id ? (

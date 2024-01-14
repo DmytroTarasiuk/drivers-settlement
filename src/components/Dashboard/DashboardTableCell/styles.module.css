@@ -1,9 +1,12 @@
 .cell {
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #212121;
 }
 
 .input {
     max-width: 90px;
     padding: 8px;
+    font-size: 1rem;
+    font-weight: 600;
 }
