@@ -17,6 +17,7 @@ interface EnhancedTableToolbarProps {
   onDownloadExcel?: () => void;
   onAddAction?: () => void;
   tableHeaderText: string;
+  enableDownload?: boolean;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -27,6 +28,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     onDownloadExcel,
     tableHeaderText,
     onAddAction,
+    enableDownload = true,
   } = props;
 
   return (
@@ -77,21 +79,25 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           >
             Add
           </Button>
-          <Button
-            startIcon={<FileDownloadIcon />}
-            className={styles.downloadButton}
-            onClick={onDownloadExcel}
-            //style={{ minWidth: "200px" }}
-          >
-            Download Excel
-          </Button>
-          <Button
-            startIcon={<FileDownloadIcon />}
-            className={styles.downloadButton}
-            onClick={onDownloadCsv}
-          >
-            Download Csv
-          </Button>
+          {enableDownload && (
+            <Button
+              startIcon={<FileDownloadIcon />}
+              className={styles.downloadButton}
+              onClick={onDownloadExcel}
+              //style={{ minWidth: "200px" }}
+            >
+              Download Excel
+            </Button>
+          )}
+          {enableDownload && (
+            <Button
+              startIcon={<FileDownloadIcon />}
+              className={styles.downloadButton}
+              onClick={onDownloadCsv}
+            >
+              Download Csv
+            </Button>
+          )}
           {tableFilterComponent}
         </div>
       )}

@@ -7,6 +7,7 @@ import { showModalWithParams } from "../../redux/modal/actions";
 import { CustomModalTypes } from "../../redux/modal/state";
 import EnhancedTable from "../Table";
 
+import ExportExcel from "./RaportExcelExport";
 //import RaportForm from "./RaportForm";
 import RaportTableCell, { IRaportTableCell } from "./RaportTableCell";
 import { formatInputDate, raportTableCells } from "./utils";
@@ -110,12 +111,14 @@ const Raport = () => {
 
   return (
     <>
+      <ExportExcel exportData={dataToExport} />
       <EnhancedTable
         rows={finalData}
         headCells={raportTableCells}
         onAdd={onAddReport}
         orderType="asc"
         tableHeaderText="Faktury"
+        enableDownload={false}
         dataToExport={dataToExport}
         orderByField="idx"
         hideFieldsOnList={["_id", "__v", "kwCounter", "kpCounter"]}
