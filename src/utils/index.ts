@@ -47,7 +47,12 @@ export const fixSpellingMisstakes = (name: string) => {
     case "dmytro tarasuik":
       return "dmytro tarasiuk";
     case "bohdan striletskyi":
-      return "bogdan striletskyi";
+    case "bogdan striletskyi":
+      return "bohdan strilletskyi";
+    case "antonov yevhenii":
+      return "yevhenii antonov";
+    case "oleksii zamakhov":
+      return "olek zamakhov";
     default:
       return name;
   }
