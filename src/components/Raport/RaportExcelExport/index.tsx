@@ -43,10 +43,10 @@ const ExportExcel = ({ exportData }: IExportExcel) => {
                 {item["Treść"]}
               </td>
               <td colSpan={4} style={{ background: "rgba(255,255,204,255)" }}>
-                {item["Przychód"]}
+                {item["Przychód"].toString().replace(".", ",")}
               </td>
               <td colSpan={4} style={{ background: "rgba(255,255,204,255)" }}>
-                {item["Rozchód"]}
+                {item["Rozchód"].toString().replace(".", ",")}
               </td>
             </tr>
           ))}
