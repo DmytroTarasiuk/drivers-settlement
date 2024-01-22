@@ -18,6 +18,7 @@ interface EnhancedTableToolbarProps {
   onAddAction?: () => void;
   tableHeaderText: string;
   enableDownload?: boolean;
+  onDeleteAll?: () => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -29,6 +30,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     tableHeaderText,
     onAddAction,
     enableDownload = true,
+    onDeleteAll,
   } = props;
 
   return (
@@ -66,7 +68,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={onDeleteAll}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>

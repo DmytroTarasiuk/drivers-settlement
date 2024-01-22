@@ -109,6 +109,21 @@ const Raport = () => {
     };
   });
 
+  const handleDeleteSelected = useCallback(
+    (selectedIds) => {
+      dispatch(
+        showModalWithParams({
+          modalType: CustomModalTypes.DELETE_CONFIRM,
+          params: {
+            refetch: fetchReports,
+            selectedIds,
+          },
+        }),
+      );
+    },
+    [dispatch, fetchReports],
+  );
+
   return (
     <>
       <ExportExcel exportData={dataToExport} />
@@ -118,6 +133,8 @@ const Raport = () => {
         onAdd={onAddReport}
         orderType="asc"
         tableHeaderText="Faktury"
+        disableSelection={false}
+        onDeleteSelected={handleDeleteSelected}
         enableDownload={false}
         dataToExport={dataToExport}
         orderByField="idx"

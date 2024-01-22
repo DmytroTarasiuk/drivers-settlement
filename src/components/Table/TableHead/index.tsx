@@ -1,6 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
-//import Checkbox from "@mui/material/Checkbox";
+import Checkbox from "@mui/material/Checkbox";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -17,17 +17,19 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
+  disableSelection?: boolean;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const {
     headCells,
-    //onSelectAllClick,
+    onSelectAllClick,
     order,
     orderBy,
-    //numSelected,
-    //rowCount,
+    numSelected,
+    rowCount,
     onRequestSort,
+    disableSelection = true,
   } = props;
   const createSortHandler =
     (property) => (event: React.MouseEvent<unknown>) => {
@@ -37,17 +39,19 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all sales",
-            }}
-          />
-        </TableCell> */}
+        {!disableSelection && (
+          <TableCell padding="checkbox">
+            <Checkbox
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{
+                "aria-label": "select all sales",
+              }}
+            />
+          </TableCell>
+        )}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}

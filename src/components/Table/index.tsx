@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import Box from "@mui/material/Box";
-//import Checkbox from "@mui/material/Checkbox";
+import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Paper from "@mui/material/Paper";
 import Switch from "@mui/material/Switch";
@@ -14,6 +14,7 @@ import TableRow from "@mui/material/TableRow";
 import { exportToCSV, exportToExcel } from "../../utils";
 
 import { useDataParsing } from "./hooks/useDataParsing";
+import { useTableSelect } from "./hooks/useTableSelect";
 import { filterData } from "./TableFilter/utils";
 import TableFilter from "./TableFilter";
 import EnhancedTableHead from "./TableHead";
@@ -31,6 +32,8 @@ interface ITable {
   dataToExport?: any[];
   onAdd?: () => void;
   enableDownload?: boolean;
+  disableSelection?: boolean;
+  onDeleteSelected?: (selectedIds: any[]) => void;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -88,16 +91,24 @@ export default function EnhancedTable({
   onAdd,
   dataToExport,
   enableDownload = true,
+  disableSelection = true,
+  onDeleteSelected,
 }: ITable) {
   const [order, setOrder] = useState<Order>(orderType);
   const [orderBy, setOrderBy] = useState<string>(orderByField);
-  const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(30);
   const [filters, setFilters] = useState<Object>({});
   const [isFilterButtonClicked, setIsFilterButtonClicked] =
     useState<boolean>(false);
+  const {
+    handleClick,
+    handleSelectAllClick,
+    selected,
+    isSelected,
+    setSelected,
+  } = useTableSelect(rows);
 
   const parsedArrayToRequestedFilterFields = useDataParsing(
     rows,
@@ -113,33 +124,10 @@ export default function EnhancedTable({
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
+  const onDeleteSelectedRowsTrigger = useCallback(() => {
+    onDeleteSelected?.(selected);
     setSelected([]);
-  };
-
-  // const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-  //   const selectedIndex = selected.indexOf(id);
-  //   let newSelected: readonly number[] = [];
-
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, id);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(
-  //       selected.slice(0, selectedIndex),
-  //       selected.slice(selectedIndex + 1),
-  //     );
-  //   }
-  //   setSelected(newSelected);
-  // };
+  }, [onDeleteSelected, selected, setSelected]);
 
   const TabelCellComponent = useMemo(
     () => tabelCellComponent,
@@ -160,8 +148,6 @@ export default function EnhancedTable({
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDense(event.target.checked);
   };
-
-  const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
   const findNumericFields = useMemo(() => {
     return headCells
@@ -203,6 +189,7 @@ export default function EnhancedTable({
           onDownloadCsv={handleCsvDownload}
           onDownloadExcel={handleExcelDownload}
           enableDownload={enableDownload}
+          onDeleteAll={onDeleteSelectedRowsTrigger}
           onAddAction={onAdd}
           tableFilterComponent={
             <TableFilter
@@ -229,17 +216,18 @@ export default function EnhancedTable({
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              disableSelection={disableSelection}
             />
             <TableBody>
               {visibleRows?.map((row, index) => {
-                const isItemSelected = isSelected(row.id as number);
+                const isItemSelected = isSelected(row._id as number);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 const rowValues = Object.keys(row);
 
                 return (
                   <TableRow
                     hover
-                    //onClick={(event) => handleClick(event, row.id as number)}
+                    onClick={(event) => handleClick(event, row._id as number)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -247,15 +235,17 @@ export default function EnhancedTable({
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
-                    {/* <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell> */}
+                    {!disableSelection && (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </TableCell>
+                    )}
                     {rowValues.map((keyItem, i) => {
                       return (
                         !hideFieldsOnList.includes(keyItem) && (

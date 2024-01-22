@@ -13,21 +13,39 @@ const DeleteConfirm = () => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const modalParams = useSelector(getModalParams);
-  const { id, refetch } = modalParams;
+  const { reportId, refetch, selectedIds } = modalParams;
 
-  const handleDelete = useCallback(() => {
-    API_REPORTS.deleteReport(id)
-      .then((response) => {
-        if (response) {
-          enqueueSnackbar("Report was deleted", {
-            variant: "success",
-          });
-          refetch?.();
-          dispatch(hideModal());
-        }
-      })
-      .catch((error) => console.log(error));
-  }, [id, refetch, enqueueSnackbar, dispatch]);
+  const handleDelete = useCallback(
+    async (id) => {
+      try {
+        await API_REPORTS.deleteReport(id);
+        enqueueSnackbar("Report was deleted", {
+          variant: "success",
+        });
+        refetch?.();
+        dispatch(hideModal());
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [dispatch, enqueueSnackbar, refetch],
+  );
+
+  const deleteReport = useCallback(async () => {
+    try {
+      if (selectedIds) {
+        await Promise.all(
+          selectedIds.map(async (item) => {
+            await handleDelete(item);
+          }),
+        );
+      } else {
+        await handleDelete(reportId);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [handleDelete, reportId, selectedIds]);
 
   const onCancel = useCallback(() => dispatch(hideModal()), [dispatch]);
 
@@ -38,7 +56,7 @@ const DeleteConfirm = () => {
         <Button onClick={onCancel} variant="outlined" color="secondary">
           Cancel
         </Button>
-        <Button onClick={handleDelete} variant="contained" color="primary">
+        <Button onClick={deleteReport} variant="contained" color="primary">
           Confirm
         </Button>
       </div>

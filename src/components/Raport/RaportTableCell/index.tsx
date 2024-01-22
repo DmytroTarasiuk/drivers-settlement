@@ -24,7 +24,7 @@ const RaportTableCell = memo(({ keyItem, row, refetch }: IRaportTableCell) => {
         modalType: CustomModalTypes.DELETE_CONFIRM,
         params: {
           refreshOnCLose: true,
-          id: row["_id"],
+          reportId: row["_id"],
           refetch,
         },
       }),
