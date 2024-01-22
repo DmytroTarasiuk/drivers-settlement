@@ -1,5 +1,6 @@
 export enum CustomModalTypes {
   ADD_REPORT = "ADD_PROJECT",
+  DELETE_CONFIRM = "DELETE_CONFIRM",
 }
 
 export default interface ModalState {

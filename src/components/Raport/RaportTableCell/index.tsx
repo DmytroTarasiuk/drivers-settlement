@@ -1,9 +1,10 @@
 import { memo, useCallback, useMemo } from "react";
+import { useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
 import TableCell from "@mui/material/TableCell";
-import { useSnackbar } from "notistack";
 
-import API_REPORTS from "../../../api/reports";
+import { showModalWithParams } from "../../../redux/modal/actions";
+import { CustomModalTypes } from "../../../redux/modal/state";
 import { formatInputDate } from "../utils";
 
 import styles from "./styles.module.css";
@@ -15,20 +16,20 @@ export interface IRaportTableCell {
 }
 
 const RaportTableCell = memo(({ keyItem, row, refetch }: IRaportTableCell) => {
-  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
-  const handleDelete = useCallback(() => {
-    API_REPORTS.deleteReport(row["_id"])
-      .then((response) => {
-        if (response) {
-          enqueueSnackbar("Report was deleted", {
-            variant: "success",
-          });
-          refetch?.();
-        }
-      })
-      .catch((error) => console.log(error));
-  }, [enqueueSnackbar, row, refetch]);
+  const onDeleteConfirmation = useCallback(() => {
+    dispatch(
+      showModalWithParams({
+        modalType: CustomModalTypes.DELETE_CONFIRM,
+        params: {
+          refreshOnCLose: true,
+          id: row["_id"],
+          refetch,
+        },
+      }),
+    );
+  }, [dispatch, refetch, row]);
 
   const renderContent = useMemo(() => {
     switch (keyItem) {
@@ -49,7 +50,7 @@ const RaportTableCell = memo(({ keyItem, row, refetch }: IRaportTableCell) => {
           <Button
             className={styles.button}
             variant="outlined"
-            onClick={handleDelete}
+            onClick={onDeleteConfirmation}
             color="secondary"
           >
             Delete
@@ -58,7 +59,7 @@ const RaportTableCell = memo(({ keyItem, row, refetch }: IRaportTableCell) => {
       default:
         return row[keyItem];
     }
-  }, [keyItem, row, handleDelete]);
+  }, [keyItem, row, onDeleteConfirmation]);
 
   return (
     <TableCell align="left" padding="normal">

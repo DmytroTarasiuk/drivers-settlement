@@ -24,6 +24,8 @@ const AddReportForm = lazy(
   () => import("../components/Raport/RaportForm/index"),
 );
 
+const DeleteConfirm = lazy(() => import("./DeleteConfirm/index"));
+
 interface IPortal {
   children: ReactNode;
 }
@@ -49,6 +51,12 @@ const renderContent = (modalType: string, hideModal?: () => void) => {
       return (
         <Suspense fallback={"loading"}>
           <AddReportForm />
+        </Suspense>
+      );
+    case CustomModalTypes.DELETE_CONFIRM:
+      return (
+        <Suspense fallback={"loading"}>
+          <DeleteConfirm />
         </Suspense>
       );
   }
