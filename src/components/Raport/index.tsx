@@ -28,8 +28,8 @@ const Raport = () => {
 
   const sortReportsByDate = (reports) => {
     return reports?.sort((a, b) => {
-      const dateA = new Date(a.date.split(".").reverse().join("-"));
-      const dateB = new Date(b.date.split(".").reverse().join("-"));
+      const dateA = new Date(a.date?.split(".").reverse().join("-"));
+      const dateB = new Date(b.date?.split(".").reverse().join("-"));
       return dateA.getTime() - dateB.getTime();
     });
   };
@@ -95,13 +95,13 @@ const Raport = () => {
             "(" +
             item.kwCounter +
             "/" +
-            formatInputDate(item.date).slice(3) +
+            formatInputDate(item.date)?.slice(3) +
             ")"
           : item.symbol +
             "(" +
             item.kpCounter +
             "/" +
-            formatInputDate(item.date).slice(3) +
+            formatInputDate(item.date)?.slice(3) +
             ")",
       Treść: item.description,
       Przychód: item.income,

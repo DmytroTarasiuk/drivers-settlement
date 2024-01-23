@@ -69,7 +69,10 @@ export const raportTableCells = [
 ];
 
 export function formatInputDate(inputDate) {
-  const parts = inputDate.split(".");
-  const formattedDate = `${parts[0]}/${parts[1]}/${parts[2].slice(-2)}`;
-  return formattedDate;
+  if (inputDate) {
+    const parts = inputDate.split(".");
+    const formattedDate = `${parts[0]}/${parts[1]}/${parts[2].slice(-2)}`;
+    return formattedDate;
+  }
+  return null;
 }

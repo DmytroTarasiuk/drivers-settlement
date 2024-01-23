@@ -23,6 +23,9 @@ const Report = {
   deleteReport: (id: string) => {
     return axios.delete(`${process.env.REACT_APP_API_URL_PATH}/reports/${id}`);
   },
+  editReport: (id: string) => {
+    return axios.put(`${process.env.REACT_APP_API_URL_PATH}/reports/${id}`);
+  },
 };
 
 export default Report;
