@@ -28,8 +28,8 @@ const ExportExcel = ({ exportData }: IExportExcel) => {
             <th>Przychód</th>
             <th>Rozchód</th>
           </tr> */}
-          {exportData?.map((item) => (
-            <tr>
+          {exportData?.map((item, index) => (
+            <tr key={index}>
               <td style={{ background: "rgba(255,255,204,255)" }}>
                 {item["Lp"]}
               </td>

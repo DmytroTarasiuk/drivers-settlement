@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useCallback, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import REPORT_API, { IReport } from "../../api/reports";
 import CustomModal from "../../modal";
 import { showModalWithParams } from "../../redux/modal/actions";
 import { CustomModalTypes } from "../../redux/modal/state";
+import { clearReportList, setReportList } from "../../redux/reports/actions";
+import { getReportList } from "../../redux/reports/selectors";
 import EnhancedTable from "../Table";
 
 import ExportExcel from "./RaportExcelExport";
@@ -13,7 +15,8 @@ import RaportTableCell, { IRaportTableCell } from "./RaportTableCell";
 import { formatInputDate, raportTableCells } from "./utils";
 
 const Raport = () => {
-  const [reports, setReports] = useState<IReport[]>([]);
+  //const [reports, setReports] = useState<IReport[]>([]);
+  const reports = useSelector(getReportList);
   const dispatch = useDispatch();
   let kwCounter = 0;
   let kpCounter = 0;
@@ -21,10 +24,10 @@ const Raport = () => {
   const fetchReports = useCallback(() => {
     REPORT_API.getReports()
       .then((response) => {
-        if (response) setReports(response.data);
+        if (response) dispatch(setReportList(response.data));
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [dispatch]);
 
   const sortReportsByDate = (reports) => {
     return reports?.sort((a, b) => {
@@ -123,6 +126,12 @@ const Raport = () => {
     },
     [dispatch, fetchReports],
   );
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearReportList());
+    };
+  }, [dispatch]);
 
   return (
     <>

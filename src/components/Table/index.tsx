@@ -227,7 +227,7 @@ export default function EnhancedTable({
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row._id as number)}
+                    //onClick={(event) => handleClick(event, row._id as number)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -236,7 +236,12 @@ export default function EnhancedTable({
                     sx={{ cursor: "pointer" }}
                   >
                     {!disableSelection && (
-                      <TableCell padding="checkbox">
+                      <TableCell
+                        padding="checkbox"
+                        onClick={(event) =>
+                          handleClick(event, row._id as number)
+                        }
+                      >
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, MenuItem, TextField } from "@mui/material";
 import { Dayjs } from "dayjs";
@@ -8,27 +8,61 @@ import { useSnackbar } from "notistack";
 import REPORT_API from "../../../api/reports";
 import { hideModal } from "../../../redux/modal/actions";
 import { getModalParams } from "../../../redux/modal/selectors";
+import {
+  clearReportDetails,
+  setReportDetails,
+} from "../../../redux/reports/actions";
+import { getReportDetails } from "../../../redux/reports/selectors";
 
 import DatePickerComponent from "./DatePicker";
 import { formatDate, symbols } from "./utils";
 
 import styles from "./styles.module.css";
 
-const RaportForm = () => {
-  const [date, setDate] = useState<Dayjs | null>();
+interface IRaportForm {
+  isEdit?: boolean;
+}
+
+const RaportForm = ({ isEdit }: IRaportForm) => {
+  const [reportDate, setReportDate] = useState<Dayjs | null>();
   const { enqueueSnackbar } = useSnackbar();
+  const reportDetails = useSelector(getReportDetails);
   const modalParams = useSelector(getModalParams);
   const dispatch = useDispatch();
 
-  const { refetch } = modalParams;
+  const { refetch, reportId } = modalParams;
 
-  const initialState = {
-    date: date && formatDate(date),
-    symbol: "",
-    description: "",
-    income: 0,
-    cost: 0,
-  };
+  useEffect(() => {
+    if (reportId) {
+      REPORT_API.getReport(reportId)
+        .then((response) => {
+          if (response) dispatch(setReportDetails(response.data));
+        })
+        .catch((error) => console.log(error));
+    }
+
+    return () => {
+      dispatch(clearReportDetails());
+    };
+  }, [dispatch, reportId]);
+
+  const {
+    date = reportDate && formatDate(reportDate),
+    symbol = "",
+    description = "",
+    income = 0,
+    cost = 0,
+  } = reportDetails || {};
+
+  const initialState = useMemo(() => {
+    return {
+      date: date ?? null,
+      symbol: symbol ?? "",
+      description: description ?? "",
+      income: income ?? 0,
+      cost: cost ?? 0,
+    };
+  }, [cost, date, description, income, symbol]);
 
   // const validate = (values) => {
   //   if (values.description === "") {
@@ -53,19 +87,31 @@ const RaportForm = () => {
 
   const onHandleSubmit = useCallback(
     (values) => {
-      REPORT_API.createReport(values)
-        .then((res) => {
-          if (res) {
-            enqueueSnackbar("Raport was created", {
+      if (isEdit) {
+        REPORT_API.editReport(reportId, values)
+          .then((res) => {
+            enqueueSnackbar("Raport was edited", {
               variant: "success",
             });
             refetch?.();
             dispatch(hideModal());
-          }
-        })
-        .catch((error) => console.log(error));
+          })
+          .catch((error) => console.log(error));
+      } else {
+        REPORT_API.createReport(values)
+          .then((res) => {
+            if (res) {
+              enqueueSnackbar("Raport was created", {
+                variant: "success",
+              });
+              refetch?.();
+              dispatch(hideModal());
+            }
+          })
+          .catch((error) => console.log(error));
+      }
     },
-    [enqueueSnackbar, dispatch, refetch],
+    [enqueueSnackbar, dispatch, refetch, isEdit, reportId],
   );
 
   //const disableButton = !!errors.description;
@@ -73,7 +119,7 @@ const RaportForm = () => {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.section}>
-        <DatePickerComponent value={date} setValue={setDate} />
+        <DatePickerComponent value={reportDate} setValue={setReportDate} />
         <TextField
           id="outlined-select-symbol"
           select
@@ -132,7 +178,7 @@ const RaportForm = () => {
         //disabled={disableButton}
         onClick={submitForm}
       >
-        Add
+        {isEdit ? "Update" : "Add"}
       </Button>
     </form>
   );

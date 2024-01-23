@@ -14,6 +14,9 @@ const Report = {
   getReports: () => {
     return axios.get(`${process.env.REACT_APP_API_URL_PATH}/reports`);
   },
+  getReport: (id: string) => {
+    return axios.get(`${process.env.REACT_APP_API_URL_PATH}/reports/${id}`);
+  },
   createReport: (body: IReport) => {
     const data = {
       ...body,
@@ -23,8 +26,14 @@ const Report = {
   deleteReport: (id: string) => {
     return axios.delete(`${process.env.REACT_APP_API_URL_PATH}/reports/${id}`);
   },
-  editReport: (id: string) => {
-    return axios.put(`${process.env.REACT_APP_API_URL_PATH}/reports/${id}`);
+  editReport: (id: string, body: IReport) => {
+    const data = {
+      ...body,
+    };
+    return axios.put(
+      `${process.env.REACT_APP_API_URL_PATH}/reports/${id}`,
+      data,
+    );
   },
 };
 

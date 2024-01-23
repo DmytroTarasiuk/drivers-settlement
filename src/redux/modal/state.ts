@@ -1,5 +1,6 @@
 export enum CustomModalTypes {
-  ADD_REPORT = "ADD_PROJECT",
+  ADD_REPORT = "ADD_REPORT",
+  EDIT_REPORT = "EDIT_REPORT",
   DELETE_CONFIRM = "DELETE_CONFIRM",
 }
 

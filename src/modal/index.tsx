@@ -53,6 +53,12 @@ const renderContent = (modalType: string, hideModal?: () => void) => {
           <AddReportForm />
         </Suspense>
       );
+    case CustomModalTypes.EDIT_REPORT:
+      return (
+        <Suspense fallback={"loading"}>
+          <AddReportForm isEdit={true} />
+        </Suspense>
+      );
     case CustomModalTypes.DELETE_CONFIRM:
       return (
         <Suspense fallback={"loading"}>

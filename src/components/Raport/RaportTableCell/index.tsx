@@ -31,6 +31,18 @@ const RaportTableCell = memo(({ keyItem, row, refetch }: IRaportTableCell) => {
     );
   }, [dispatch, refetch, row]);
 
+  const onEditReport = useCallback(() => {
+    dispatch(
+      showModalWithParams({
+        modalType: CustomModalTypes.EDIT_REPORT,
+        params: {
+          reportId: row["_id"],
+          refetch,
+        },
+      }),
+    );
+  }, [dispatch, refetch, row]);
+
   const renderContent = useMemo(() => {
     switch (keyItem) {
       case "symbol":
@@ -47,19 +59,23 @@ const RaportTableCell = memo(({ keyItem, row, refetch }: IRaportTableCell) => {
         }`;
       case "actions":
         return (
-          <Button
-            className={styles.button}
-            variant="outlined"
-            onClick={onDeleteConfirmation}
-            color="secondary"
-          >
-            Delete
-          </Button>
+          <div className={styles.buttons}>
+            <Button variant="outlined" onClick={onEditReport} color="info">
+              Edit
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={onDeleteConfirmation}
+              color="error"
+            >
+              Delete
+            </Button>
+          </div>
         );
       default:
         return row[keyItem];
     }
-  }, [keyItem, row, onDeleteConfirmation]);
+  }, [keyItem, row, onDeleteConfirmation, onEditReport]);
 
   return (
     <TableCell align="left" padding="normal">

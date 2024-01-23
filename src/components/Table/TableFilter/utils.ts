@@ -1,13 +1,39 @@
 const isReportInRange = (report: any, startDate: string, endDate: string) => {
-  const [day, month, year] = report.date.split(".");
+  const dateParts = report?.date?.split(".");
+
+  if (!dateParts || dateParts.length !== 3) {
+    console.error("Invalid date format in report:", report);
+    return null;
+  }
+
+  const [day, month, year] = dateParts;
+
+  if (!day || !month || !year) {
+    console.error("Invalid date components in report:", report);
+    return null;
+  }
+
   const reportDate = new Date(`${year}-${month}-${day}`);
 
-  return reportDate >= new Date(startDate) && reportDate <= new Date(endDate);
+  if (isNaN(reportDate.getTime())) {
+    console.error("Invalid date value in report:", report);
+    return null;
+  }
+
+  const startDateObj = new Date(startDate);
+  const endDateObj = new Date(endDate);
+
+  if (isNaN(startDateObj.getTime()) || isNaN(endDateObj.getTime())) {
+    console.error("Invalid start or end date:", startDate, endDate);
+    return null;
+  }
+
+  return reportDate >= startDateObj && reportDate <= endDateObj;
 };
 
 export const filterData = (data: any[], filters: {}, searchText: string) => {
-  let filteredData = data.filter((row) =>
-    Object.keys(filters).every((key) => {
+  let filteredData = (data || []).filter((row) =>
+    (Object.keys(filters) || []).every((key) => {
       switch (key) {
         case "date":
           const startDate = filters[key]?.start_date;
@@ -20,7 +46,7 @@ export const filterData = (data: any[], filters: {}, searchText: string) => {
   );
 
   if (searchText !== "") {
-    filteredData = filteredData.filter((row) =>
+    filteredData = filteredData?.filter((row) =>
       Object.keys(row).some(
         (key) =>
           row[key] &&
