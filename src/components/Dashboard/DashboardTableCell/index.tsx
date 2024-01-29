@@ -1,5 +1,9 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import Button from "@mui/material/Button";
 import TableCell from "@mui/material/TableCell";
+import { useSnackbar } from "notistack";
+
+import MAIL_API from "../../../api/mails";
 
 import styles from "./styles.module.css";
 
@@ -24,6 +28,7 @@ const DashboardTableCell = memo(
     const [localAdjustment, setLocalAdjustment] = useState(adjustment || "");
     const [localRent, setLocalRent] = useState(rent || "");
     const [isInputLeave, setIsInputLeave] = useState<boolean>(false);
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleBlur = () => {
       setIsInputLeave(true);
@@ -38,6 +43,22 @@ const DashboardTableCell = memo(
       const value = Number(event.target.value);
       setLocalRent(value);
     }, []);
+
+    const handleSendEMail = useCallback(() => {
+      const body = {
+        to: row["email"],
+        subject: "Test subject",
+      };
+      MAIL_API.sendEmail(body)
+        .then((response) => {
+          if (response.data) {
+            enqueueSnackbar("Email was send", {
+              variant: "success",
+            });
+          }
+        })
+        .catch((error) => console.log(error));
+    }, [enqueueSnackbar, row]);
 
     useEffect(() => {
       if (isInputLeave) {
@@ -67,6 +88,20 @@ const DashboardTableCell = memo(
               type="number"
             />
           );
+        case "actions":
+          return (
+            row["email"] && (
+              <div className={styles.buttons}>
+                <Button
+                  variant="outlined"
+                  onClick={handleSendEMail}
+                  color="info"
+                >
+                  Send email
+                </Button>
+              </div>
+            )
+          );
         case "adjustments":
           return (
             <input
@@ -90,6 +125,7 @@ const DashboardTableCell = memo(
       handleAdjustmentChange,
       localRent,
       handleRentChange,
+      handleSendEMail,
     ]);
 
     const renderBackground = (key) => {

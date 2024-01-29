@@ -83,6 +83,15 @@ export const getRentValue = (driverName: string) => {
   }
 };
 
+export const getEmailValue = (driverName: string) => {
+  switch (driverName) {
+    case "Dmytro Tarasiuk":
+      return "dmytro.tarasiuk1899@gmail.com";
+    default:
+      return null;
+  }
+};
+
 export const getPaymentType = (driverName: string) => {
   switch (driverName) {
     case "Bohdan Striletskyi":

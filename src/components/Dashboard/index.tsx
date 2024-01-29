@@ -5,6 +5,7 @@ import useCsvConverter from "../../hooks/useCsvConverter";
 import { AppType } from "../../types";
 import {
   fixSpellingMisstakes,
+  getEmailValue,
   getPaymentType,
   removeSpecialChar,
   rentValues,
@@ -115,6 +116,7 @@ const Dashboard = () => {
       const rentValue =
         rent && rent[item["ID kierowcy"]] !== 0 ? rent[item["ID kierowcy"]] : 0;
       const paymentType = getPaymentType(name);
+      const email = getEmailValue(name);
       const adjustmentsValue =
         adjustments && adjustments[item["ID kierowcy"]] !== 0
           ? adjustments[item["ID kierowcy"]]
@@ -147,9 +149,11 @@ const Dashboard = () => {
         vatBonus: +vatBonus.toFixed(2),
         comission,
         rent: rentValue,
+        email,
         adjustments: adjustmentsValue,
         salary: +salary.toFixed(2),
         paymentType,
+        actions: null,
       };
     });
   }, [combinedArray, adjustments, rent]);
@@ -222,7 +226,7 @@ const Dashboard = () => {
           dataToExport={dataToExport}
           orderByField="salary"
           tableHeaderText="Rozliczenie Kierowcow"
-          hideFieldsOnList={["id"]}
+          hideFieldsOnList={["id", "email"]}
           renderFilterFields={["name"]}
           tabelCellComponent={(props: IDashboardTableCell) => (
             <DashboardTableCell
