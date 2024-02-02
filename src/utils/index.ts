@@ -105,6 +105,18 @@ export const getEmailValue = (driverName: string) => {
       return "al.trotskij1@gmail.com";
     case "Yurii Rabii":
       return "yura.rabiy.93@gmail.com";
+    case "Borys Kukava":
+      return "boryskukava1995@gmail.com";
+    case "Maksym Bevza":
+      return "makshome2451@gmail.com";
+    case "Maksym Hotsman":
+      return "maks.gocman.mg@gmail.com";
+    case "Eduard Savitski":
+      return "savitskiyeduard0967@gmail.com";
+    case "Antonov Yevhenii":
+      return "antonovyevhenii2@gmail.com";
+    case "Oleksandr Bosenko":
+      return "mi8lite2504@gmail.com";
     default:
       return null;
   }
