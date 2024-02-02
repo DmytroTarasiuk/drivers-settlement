@@ -47,7 +47,8 @@ const DashboardTableCell = memo(
     const handleSendEMail = useCallback(() => {
       const body = {
         to: row["email"],
-        subject: "Test subject",
+        subject: "Rozliczenie",
+        data: row,
       };
       MAIL_API.sendEmail(body)
         .then((response) => {
