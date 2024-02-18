@@ -91,7 +91,9 @@ const Dashboard = () => {
       const name = item["Kierowca"];
       const profitBolt =
         +item["Wartość brutto"]?.replace(",", ".") -
-          +item["Opłata Bolt"]?.replace(",", ".").substring(1) || 0;
+          +item["Opłata Bolt"]?.replace(",", ".").substring(1) +
+          +item["Opłata za anulowanie"]?.replace(",", ".") +
+          +item["Napiwek"]?.replace(",", ".") || 0;
       const profitUber =
         +item["Wypłacono Ci : Twój przychód"] -
           +item["Wypłacono Ci:Twój przychód:Promocja:Program Quest"] || 0;
