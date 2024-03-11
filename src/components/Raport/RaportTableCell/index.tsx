@@ -54,7 +54,7 @@ const RaportTableCell = memo(({ keyItem, row, refetch }: IRaportTableCell) => {
           "(" +
           symbolToShow +
           "/" +
-          formatInputDate(row["date"]).slice(3) +
+          formatInputDate(row["date"])?.slice(3) +
           ")"
         }`;
       case "actions":

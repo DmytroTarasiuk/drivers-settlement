@@ -52,13 +52,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             />
           </TableCell>
         )}
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
             key={headCell.id}
             style={{
               background: headCell.background,
               fontSize: "1rem",
               fontWeight: 700,
+              position: index === 0 ? "absolute" : "static",
+              left: index === 0 && 0,
             }}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}

@@ -78,6 +78,10 @@ const DashboardTableCell = memo(
 
     const renderContent = useMemo(() => {
       switch (keyItem) {
+        case "name":
+          return (
+            <div style={{ position: "absolute", left: 0 }}>{row[keyItem]}</div>
+          );
         case "rent":
           return (
             <input
@@ -157,7 +161,11 @@ const DashboardTableCell = memo(
       <TableCell
         style={{
           background: renderBackground(keyItem),
+          position: keyItem === "name" ? "sticky" : "static",
+          left: keyItem === "name" && 0,
         }}
+        component={keyItem === "name" ? "th" : null}
+        scope={keyItem === "name" ? "th" : null}
         align="left"
         padding="normal"
       >
